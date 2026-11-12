@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tuyển tập thơ của Quốc Duy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root[data-theme="light"]{
+    --sky-top:#f5ded0;
+    --sky-mid:#fbeee0;
+    --sky-bottom:#fdf8f0;
+    --ink:#3a2a34;
+    --ink-soft:#6b5560;
+    --rose:#c1667a;
+    --rose-deep:#93435a;
+    --gold:#c9a464;
+    --moss:#8a9a6e;
+    --moss-deep:#63734a;
+    --card-bg:rgba(255,251,246,0.82);
+    --card-border:rgba(147,67,90,0.16);
+    --orb-glow: radial-gradient(circle at 35% 35%, #fff7e8, #f7cf8d 55%, #e7ab6b 100%);
+    --orb-halo: rgba(247,207,141,0.55);
+    --shadow: 0 30px 60px -25px rgba(90,45,55,0.35);
+  }
+  :root[data-theme="dark"]{
+    --sky-top:#0f1128;
+    --sky-mid:#1b1d3d;
+    --sky-bottom:#262452;
+    --ink:#f3e9e4;
+    --ink-soft:#c9b9c4;
+    --rose:#e79bab;
+    --rose-deep:#f3b4c0;
+    --gold:#e7c98a;
+    --moss:#a9c08c;
+    --moss-deep:#7f9a63;
+    --card-bg:rgba(28,26,54,0.68);
+    --card-border:rgba(231,201,138,0.2);
+    --orb-glow: radial-gradient(circle at 35% 35%, #ffffff, #eae4f5 45%, #b9b0d6 100%);
+    --orb-halo: rgba(200,190,240,0.35);
+    --shadow: 0 30px 70px -25px rgba(0,0,0,0.6);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Be Vietnam Pro', sans-serif;
+    color:var(--ink);
+    background:var(--sky-bottom);
+    overflow-x:hidden;
+    transition:background 0.8s ease, color 0.8s ease;
+  }
+
+  /* ---------- BACKGROUND SCENE ---------- */
+  .scene{
+    position:fixed;
+    inset:0;
+    z-index:-3;
+    background:linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 45%, var(--sky-bottom) 100%);
+    transition:background 1s ease;
+  }
+  .stars{
+    position:fixed;
+    inset:0;
+    z-index:-2;
+    opacity:0;
+    transition:opacity 1s ease;
+    pointer-events:none;
+  }
+  [data-theme="dark"] .stars{opacity:1;}
+  .star{
+    position:absolute;
+    width:2px;height:2px;
+    background:#fff;
+    border-radius:50%;
+    animation:twinkle 3.5s ease-in-out infinite;
+  }
+  @keyframes twinkle{0%,100%{opacity:.2;}50%{opacity:1;}}
+
+  .orb{
+    position:fixed;
+    top:8%;
+    right:12%;
+    width:120px;height:120px;
+    border-radius:50%;
+    background:var(--orb-glow);
+    box-shadow:0 0 90px 30px var(--orb-halo);
+    z-index:-2;
+    transition:box-shadow 1s ease, background-image 1s ease, transform 0.3s ease-out;
+  }
+  [data-theme="dark"] .orb{
+    background-image:
+      radial-gradient(circle at 65% 30%, rgba(150,140,190,0.5) 0 8px, transparent 9px),
+      radial-gradient(circle at 30% 60%, rgba(150,140,190,0.4) 0 6px, transparent 7px),
+      var(--orb-glow);
+  }
+
+  .hills{
+    position:fixed;
+    bottom:0; left:0; width:100%;
+    z-index:-1;
+    pointer-events:none;
+    transition:transform 0.3s ease-out;
+  }
+  .hills svg{display:block; width:100%; height:auto;}
+
+  .blossom-branch{
+    position:fixed;
+    top:-20px; left:-40px;
+    width:280px;
+    z-index:-1;
+    opacity:0.9;
+    pointer-events:none;
+    transform:rotate(-6deg);
+  }
+  .blossom-branch.right{
+    left:auto; right:-60px; top:-10px;
+    transform:rotate(190deg) scaleX(-1);
+    width:220px;
+  }
+
+  .petals{
+    position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden;
+  }
+  .petal{
+    position:absolute;
+    top:-5%;
+    width:10px; height:8px;
+    background:var(--rose);
+    border-radius:60% 10% 60% 10%;
+    opacity:0.7;
+    animation-name:fall, sway;
+    animation-timing-function:linear, ease-in-out;
+    animation-iteration-count:infinite, infinite;
+  }
+  @keyframes fall{
+    0%{top:-5%;}
+    100%{top:105%;}
+  }
+  @keyframes sway{
+    0%,100%{margin-left:0;}
+    50%{margin-left:40px;}
+  }
+
+  /* ---------- LAYOUT ---------- */
+  header.hero{
+    min-height:92vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:40px 24px;
+    position:relative;
+  }
+  .top-bar{
+    position:fixed;
+    top:0; left:0; right:0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:22px 34px;
+    z-index:20;
+    mix-blend-mode:normal;
+  }
+  .brand-mini{
+    font-family:'Playfair Display', serif;
+    font-weight:600;
+    font-size:1.05rem;
+    color:var(--rose-deep);
+    letter-spacing:0.02em;
+    opacity:0;
+    transform:translateY(-8px);
+    transition:opacity .4s ease, transform .4s ease, color .8s ease;
+  }
+  .top-bar.show .brand-mini{opacity:1; transform:translateY(0);}
+
+  .theme-toggle{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:var(--card-bg);
+    border:1px solid var(--card-border);
+    border-radius:999px;
+    padding:8px 18px 8px 8px;
+    cursor:pointer;
+    backdrop-filter:blur(8px);
+    box-shadow:var(--shadow);
+    transition:background .8s ease, border-color .8s ease;
+    font-family:'Be Vietnam Pro', sans-serif;
+    font-size:0.85rem;
+    color:var(--ink);
+  }
+  .theme-toggle .knob{
+    width:30px; height:30px;
+    border-radius:50%;
+    background:var(--orb-glow);
+    box-shadow:0 0 12px 3px var(--orb-halo);
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .5s cubic-bezier(.68,-0.4,.27,1.4);
+  }
+  .theme-toggle:hover .knob{transform:rotate(50deg);}
+
+  .eyebrow{
+    font-family:'Be Vietnam Pro', sans-serif;
+    letter-spacing:0.35em;
+    text-transform:uppercase;
+    font-size:0.72rem;
+    color:var(--rose-deep);
+    margin-bottom:22px;
+    opacity:0.85;
+  }
+  h1.title{
+    font-family:'Playfair Display', serif;
+    font-weight:700;
+    font-size:clamp(2.4rem, 6vw, 4.6rem);
+    line-height:1.15;
+    margin:0 0 18px;
+    color:var(--ink);
+  }
+  h1.title em{
+    font-style:italic;
+    color:var(--rose-deep);
+    font-weight:600;
+  }
+  .tagline{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:clamp(1.05rem, 2vw, 1.4rem);
+    color:var(--ink-soft);
+    max-width:560px;
+    margin:0 auto 34px;
+    line-height:1.6;
+  }
+  .hero-stats{
+    display:flex;
+    gap:34px;
+    font-family:'Be Vietnam Pro', sans-serif;
+    font-size:0.85rem;
+    color:var(--ink-soft);
+  }
+  .hero-stats b{
+    display:block;
+    font-family:'Playfair Display', serif;
+    font-size:1.5rem;
+    color:var(--rose-deep);
+  }
+  .scroll-cue{
+    margin-top:56px;
+    font-size:0.75rem;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    animation:bob 2.4s ease-in-out infinite;
+  }
+  .scroll-cue span{width:1px; height:34px; background:var(--rose-deep); opacity:.5;}
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+
+  main{
+    position:relative;
+    max-width:1100px;
+    margin:0 auto;
+    padding:0 24px 120px;
+  }
+
+  section.section-head{
+    text-align:center;
+    margin:0 auto 48px;
+    max-width:600px;
+  }
+  section.section-head .num{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color:var(--rose-deep);
+    font-size:1rem;
+    letter-spacing:0.08em;
+  }
+  section.section-head h2{
+    font-family:'Playfair Display', serif;
+    font-size:clamp(1.7rem,3.4vw,2.4rem);
+    margin:8px 0 12px;
+  }
+  section.section-head p{
+    font-family:'Cormorant Garamond', serif;
+    color:var(--ink-soft);
+    font-size:1.15rem;
+    line-height:1.6;
+  }
+
+  /* ---------- FORM ---------- */
+  .compose-wrap{
+    perspective:1400px;
+    margin-bottom:110px;
+  }
+  .compose{
+    background:var(--card-bg);
+    border:1px solid var(--card-border);
+    border-radius:22px;
+    padding:38px clamp(20px,5vw,52px);
+    backdrop-filter:blur(14px);
+    box-shadow:var(--shadow);
+    transition:background .8s ease, border-color .8s ease, transform .4s ease;
+  }
+  .compose-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(190px, 1fr));
+    gap:18px;
+  }
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+    margin-bottom:18px;
+  }
+  .field.full{grid-column:1 / -1;}
+  .field label{
+    font-size:0.78rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--rose-deep);
+    font-weight:500;
+  }
+  .field input, .field textarea{
+    font-family:'Cormorant Garamond', serif;
+    font-size:1.15rem;
+    color:var(--ink);
+    background:rgba(255,255,255,0.35);
+    border:1px solid var(--card-border);
+    border-radius:12px;
+    padding:12px 16px;
+    resize:vertical;
+    outline:none;
+    transition:border-color .25s ease, box-shadow .25s ease, background .8s ease;
+  }
+  [data-theme="dark"] .field input, [data-theme="dark"] .field textarea{
+    background:rgba(255,255,255,0.05);
+  }
+  .field textarea{min-height:180px; line-height:1.7; white-space:pre-wrap;}
+  .field input:focus, .field textarea:focus{
+    border-color:var(--rose);
+    box-shadow:0 0 0 4px var(--orb-halo);
+  }
+  .compose-footer{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+    margin-top:6px;
+  }
+  .hint{
+    font-size:0.8rem;
+    color:var(--ink-soft);
+    font-style:italic;
+    font-family:'Cormorant Garamond', serif;
+  }
+  button.publish{
+    font-family:'Be Vietnam Pro', sans-serif;
+    font-size:0.9rem;
+    font-weight:500;
+    letter-spacing:0.03em;
+    color:#fff8f2;
+    background:linear-gradient(135deg, var(--rose), var(--rose-deep));
+    border:none;
+    border-radius:999px;
+    padding:14px 30px;
+    cursor:pointer;
+    box-shadow:0 14px 26px -12px var(--rose-deep);
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  button.publish:hover{transform:translateY(-2px); box-shadow:0 18px 30px -12px var(--rose-deep);}
+  button.publish:active{transform:translateY(0);}
+
+  /* ---------- GALLERY ---------- */
+  .gallery{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(min(100%,300px), 1fr));
+    align-items:start;
+    gap:30px;
+    perspective:1600px;
+  }
+  .poem-card{
+    position:relative;
+    background:var(--card-bg);
+    border:1px solid var(--card-border);
+    border-radius:20px;
+    padding:32px 30px 28px;
+    backdrop-filter:blur(12px);
+    box-shadow:var(--shadow);
+    transform-style:preserve-3d;
+    transition:transform .12s ease-out, box-shadow .3s ease, background .8s ease, border-color .8s ease, opacity .6s ease, translate .6s ease;
+    opacity:0;
+    translate:0 26px;
+    cursor:default;
+  }
+  .poem-card.in{opacity:1; translate:0 0;}
+  .poem-card::before{
+    content:"❀";
+    position:absolute;
+    top:20px; right:24px;
+    color:var(--rose);
+    opacity:0.5;
+    font-size:1.1rem;
+    transform:translateZ(30px);
+  }
+  .poem-index{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color:var(--rose-deep);
+    font-size:0.9rem;
+    margin-bottom:6px;
+    transform:translateZ(20px);
+  }
+  .poem-title{
+    font-family:'Playfair Display', serif;
+    font-size:1.4rem;
+    font-weight:600;
+    margin:0 0 14px;
+    color:var(--ink);
+    transform:translateZ(24px);
+    padding-right:20px;
+  }
+  .poem-body{
+    font-family:'Cormorant Garamond', serif;
+    font-size:1.15rem;
+    line-height:1.85;
+    color:var(--ink);
+    white-space:pre-wrap;
+    transform:translateZ(16px);
+  }
+  .poem-divider{
+    margin:18px 0 10px;
+    font-size:0.72rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--rose-deep);
+    opacity:0.75;
+    border-top:1px dashed var(--card-border);
+    padding-top:14px;
+    transform:translateZ(16px);
+  }
+  .poem-foot{
+    margin-top:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    transform:translateZ(18px);
+  }
+  .poem-dedication{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color:var(--rose-deep);
+    font-size:1rem;
+  }
+  .poem-date{
+    font-size:0.72rem;
+    color:var(--ink-soft);
+  }
+  .poem-delete{
+    background:none;
+    border:none;
+    color:var(--ink-soft);
+    font-size:0.72rem;
+    cursor:pointer;
+    text-decoration:underline;
+    opacity:0.7;
+    transform:translateZ(20px);
+  }
+  .poem-delete:hover{opacity:1; color:var(--rose-deep);}
+
+  .empty-state{
+    text-align:center;
+    padding:60px 20px;
+    color:var(--ink-soft);
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:1.15rem;
+    grid-column:1/-1;
+  }
+
+  footer{
+    text-align:center;
+    padding:40px 20px 60px;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color:var(--ink-soft);
+    font-size:0.95rem;
+  }
+
+  .toast{
+    position:fixed;
+    bottom:30px;
+    left:50%;
+    transform:translate(-50%, 20px);
+    background:var(--card-bg);
+    border:1px solid var(--card-border);
+    backdrop-filter:blur(10px);
+    color:var(--ink);
+    padding:14px 26px;
+    border-radius:999px;
+    font-family:'Be Vietnam Pro', sans-serif;
+    font-size:0.85rem;
+    box-shadow:var(--shadow);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .4s ease, transform .4s ease;
+    z-index:50;
+  }
+  .toast.show{opacity:1; transform:translate(-50%, 0);}
+
+  /* ---------- SHIMMER TITLE ---------- */
+  h1.title em{
+    background:linear-gradient(100deg, var(--rose-deep) 20%, var(--gold) 40%, var(--rose) 60%, var(--rose-deep) 80%);
+    background-size:250% auto;
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation:shimmer 7s linear infinite;
+  }
+  @keyframes shimmer{
+    0%{background-position:0% center;}
+    100%{background-position:250% center;}
+  }
+
+  /* ---------- CURSOR GLOW ---------- */
+  .cursor-glow{
+    position:fixed;
+    width:280px; height:280px;
+    border-radius:50%;
+    pointer-events:none;
+    z-index:1;
+    background:radial-gradient(circle, var(--orb-halo) 0%, transparent 70%);
+    opacity:0;
+    transform:translate(-50%,-50%);
+    transition:opacity .4s ease;
+    mix-blend-mode:soft-light;
+    filter:blur(4px);
+  }
+  .cursor-glow.on{opacity:0.55;}
+
+  /* ---------- TRANSLATION TOGGLE ---------- */
+  .checkbox-field{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:2px 0 18px;
+    grid-column:1/-1;
+  }
+  .checkbox-field input[type="checkbox"]{
+    appearance:none;
+    -webkit-appearance:none;
+    width:20px;height:20px;
+    border:1.5px solid var(--card-border);
+    border-radius:6px;
+    display:grid;
+    place-content:center;
+    cursor:pointer;
+    background:rgba(255,255,255,0.35);
+    transition:background .25s ease, border-color .25s ease;
+    flex:none;
+  }
+  [data-theme="dark"] .checkbox-field input[type="checkbox"]{background:rgba(255,255,255,0.05);}
+  .checkbox-field input[type="checkbox"]::before{
+    content:"";
+    width:11px;height:11px;
+    transform:scale(0);
+    transition:transform .18s cubic-bezier(.68,-0.4,.27,1.4);
+    background:var(--rose-deep);
+    clip-path:polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 46% 62%);
+  }
+  .checkbox-field input[type="checkbox"]:checked{border-color:var(--rose-deep);}
+  .checkbox-field input[type="checkbox"]:checked::before{transform:scale(1);}
+  .checkbox-field label{
+    font-size:0.9rem;
+    color:var(--ink);
+    font-family:'Be Vietnam Pro', sans-serif;
+    cursor:pointer;
+    user-select:none;
+  }
+  .translation-field{
+    grid-column:1/-1;
+    max-height:0;
+    overflow:hidden;
+    opacity:0;
+    transition:max-height .45s ease, opacity .35s ease, margin .45s ease;
+    margin-bottom:0;
+  }
+  .translation-field.open{
+    max-height:260px;
+    opacity:1;
+    margin-bottom:18px;
+  }
+
+  /* ---------- LIKE BUTTON ---------- */
+  .poem-foot{
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .like-wrap{
+    position:relative;
+    display:flex;
+    align-items:center;
+  }
+  .like-btn{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    background:none;
+    border:1px solid var(--card-border);
+    border-radius:999px;
+    padding:7px 14px;
+    cursor:pointer;
+    font-family:'Be Vietnam Pro', sans-serif;
+    font-size:0.8rem;
+    color:var(--ink-soft);
+    transition:border-color .25s ease, color .25s ease, transform .12s ease;
+    transform:translateZ(20px);
+  }
+  .like-btn:hover{border-color:var(--rose); color:var(--rose-deep);}
+  .like-btn:active{transform:translateZ(20px) scale(0.94);}
+  .like-btn svg{width:16px;height:16px; flex:none;}
+  .like-btn .heart-path{
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.8;
+    transition:fill .25s ease;
+  }
+  .like-btn.liked{color:var(--rose-deep); border-color:var(--rose);}
+  .like-btn.liked .heart-path{fill:var(--rose-deep); stroke:var(--rose-deep);}
+  .like-btn.pop .heart-path{animation:heartPop .45s ease;}
+  @keyframes heartPop{
+    0%{transform:scale(1);}
+    35%{transform:scale(1.5);}
+    60%{transform:scale(0.85);}
+    100%{transform:scale(1);}
+  }
+  .heart-particle{
+    position:absolute;
+    left:14px; top:0;
+    font-size:12px;
+    color:var(--rose-deep);
+    pointer-events:none;
+    animation:heartFloat 900ms ease-out forwards;
+    z-index:5;
+  }
+  @keyframes heartFloat{
+    0%{transform:translate(0,0) scale(0.6) rotate(0deg); opacity:1;}
+    100%{transform:translate(var(--dx,10px), -46px) scale(1.1) rotate(var(--rot,20deg)); opacity:0;}
+  }
+
+  @media (max-width:640px){
+    .compose-grid{grid-template-columns:1fr;}
+    .top-bar{padding:14px 16px;}
+    .hero-stats{gap:16px; row-gap:10px;}
+    .hero-stats > div{font-size:0.75rem;}
+    header.hero{min-height:88vh; padding:110px 18px 40px;}
+    .poem-card{padding:26px 20px 22px;}
+    .compose{padding:28px 18px;}
+    .cursor-glow{display:none;}
+    section.section-head{margin-bottom:34px;}
+    .back-to-top{width:46px; height:46px; right:14px; bottom:18px;}
+    .marquee-wrap{padding:14px 0;}
+    .gallery{gap:20px;}
+  }
+  @media (max-width:420px){
+    .brand-mini{display:none;}
+    .theme-toggle span#themeLabel{display:none;}
+    .theme-toggle{padding:6px;}
+  }
+  @media (hover:none){
+    .cursor-glow{display:none;}
+  }
+
+  /* ---------- SCROLL PROGRESS ---------- */
+  .scroll-progress{
+    position:fixed;
+    top:0; left:0;
+    height:3px;
+    width:0%;
+    background:linear-gradient(90deg, var(--rose), var(--gold));
+    z-index:100;
+    transition:width .12s linear;
+  }
+
+  /* ---------- BACK TO TOP ---------- */
+  .back-to-top{
+    position:fixed;
+    right:22px;
+    bottom:26px;
+    width:52px;height:52px;
+    border-radius:50%;
+    background:var(--card-bg);
+    border:1px solid var(--card-border);
+    backdrop-filter:blur(10px);
+    box-shadow:var(--shadow);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    color:var(--rose-deep);
+    z-index:40;
+    opacity:0;
+    transform:translateY(16px) scale(0.9);
+    pointer-events:none;
+    transition:opacity .35s ease, transform .35s ease, background .8s ease, border-color .8s ease;
+  }
+  .back-to-top.show{opacity:1; transform:translateY(0) scale(1); pointer-events:auto;}
+  .back-to-top:hover{transform:translateY(-4px) scale(1.06);}
+  .back-to-top:active{transform:translateY(0) scale(0.94);}
+  .back-to-top svg{width:20px;height:20px;}
+  .back-to-top .petal-burst{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+  }
+  .click-petal{
+    position:absolute;
+    left:50%; top:50%;
+    font-size:13px;
+    color:var(--rose-deep);
+    pointer-events:none;
+    animation:clickPetal 700ms ease-out forwards;
+  }
+  @keyframes clickPetal{
+    0%{transform:translate(-50%,-50%) scale(0.6); opacity:1;}
+    100%{transform:translate(calc(-50% + var(--px,0px)), calc(-50% + var(--py,0px))) scale(1) rotate(var(--pr,90deg)); opacity:0;}
+  }
+
+  /* ---------- MARQUEE ---------- */
+  .marquee-wrap{
+    overflow:hidden;
+    padding:20px 0;
+    border-top:1px solid var(--card-border);
+    border-bottom:1px solid var(--card-border);
+    background:var(--card-bg);
+    backdrop-filter:blur(6px);
+    margin:0 0 90px;
+    transition:background .8s ease, border-color .8s ease;
+    position:relative;
+    z-index:2;
+  }
+  .marquee-track{
+    display:flex;
+    width:max-content;
+    animation:marquee 5.5s linear infinite;
+    will-change:transform;
+  }
+  .marquee-track span{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:clamp(1.2rem,3vw,2rem);
+    color:var(--rose-deep);
+    white-space:nowrap;
+    display:flex;
+    align-items:center;
+    gap:36px;
+    padding-right:36px;
+  }
+  .marquee-track span::after{content:"❀"; color:var(--gold); font-style:normal;}
+  @keyframes marquee{
+    0%{transform:translateX(0);}
+    100%{transform:translateX(-50%);}
+  }
+
+  /* ---------- CARD GLARE ---------- */
+  .poem-inner{position:relative; z-index:2;}
+  .poem-card::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:inherit;
+    background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,0.4), transparent 60%);
+    opacity:0;
+    transition:opacity .3s ease;
+    pointer-events:none;
+    z-index:1;
+  }
+  [data-theme="dark"] .poem-card::after{
+    background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,0.14), transparent 60%);
+  }
+  .poem-card:hover::after{opacity:1;}
+  .poem-card::before{z-index:2;}
+
+  /* ---------- INTRO ---------- */
+  .intro-overlay{
+    position:fixed;
+    inset:0;
+    z-index:300;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 60%, var(--sky-bottom) 100%);
+    padding:24px;
+    cursor:pointer;
+    transition:opacity .9s ease, visibility .9s ease, background 1s ease;
+  }
+  .intro-overlay.hide{opacity:0; visibility:hidden; pointer-events:none;}
+  .intro-inner{
+    text-align:center;
+    max-width:560px;
+    animation:introRise 1.1s ease both;
+    cursor:default;
+  }
+  @keyframes introRise{
+    0%{opacity:0; transform:translateY(24px) scale(0.97);}
+    100%{opacity:1; transform:translateY(0) scale(1);}
+  }
+  .intro-flower{
+    font-size:2rem;
+    color:var(--rose-deep);
+    margin-bottom:16px;
+    display:inline-block;
+    animation:introSpin 7s linear infinite;
+  }
+  @keyframes introSpin{0%{transform:rotate(0);}100%{transform:rotate(360deg);}}
+  .intro-eyebrow{
+    letter-spacing:0.35em;
+    text-transform:uppercase;
+    font-size:0.7rem;
+    color:var(--rose-deep);
+    margin-bottom:16px;
+    font-family:'Be Vietnam Pro', sans-serif;
+  }
+  .intro-title{
+    font-family:'Playfair Display', serif;
+    font-size:clamp(1.7rem,5vw,2.9rem);
+    line-height:1.28;
+    margin:0 0 18px;
+    color:var(--ink);
+  }
+  .intro-title em{font-style:italic; color:var(--rose-deep);}
+  .intro-line{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:1.12rem;
+    color:var(--ink-soft);
+    margin:0 0 32px;
+    line-height:1.65;
+  }
+  .intro-btn{
+    font-family:'Be Vietnam Pro', sans-serif;
+    font-size:0.9rem;
+    font-weight:500;
+    color:#fff8f2;
+    background:linear-gradient(135deg, var(--rose), var(--rose-deep));
+    border:none;
+    border-radius:999px;
+    padding:15px 34px;
+    cursor:pointer;
+    box-shadow:0 14px 26px -12px var(--rose-deep);
+    transition:transform .25s ease, box-shadow .25s ease;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+  }
+  .intro-btn:hover{transform:translateY(-2px); box-shadow:0 18px 30px -12px var(--rose-deep);}
+  .intro-btn span{transition:transform .25s ease;}
+  .intro-btn:hover span{transform:translateX(4px);}
+  .intro-hint{
+    margin-top:18px;
+    font-size:0.75rem;
+    color:var(--ink-soft);
+    opacity:0.65;
+    font-family:'Be Vietnam Pro', sans-serif;
+  }
+  @media (max-width:480px){
+    .intro-line{font-size:1rem;}
+    .intro-btn{padding:13px 28px; font-size:0.85rem;}
+  }
+
+  /* ---------- LIVE FORUM CONTROLS ---------- */
+  .gallery-controls{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    margin-top:18px;
+    flex-wrap:wrap;
+    font-family:'Be Vietnam Pro', sans-serif;
+    font-size:0.8rem;
+    color:var(--ink-soft);
+  }
+  .live-indicator{
+    display:flex;
+    align-items:center;
+    gap:7px;
+  }
+  .live-dot{
+    width:8px;height:8px;
+    border-radius:50%;
+    background:#6fbf73;
+    box-shadow:0 0 0 0 rgba(111,191,115,0.6);
+    animation:livePulse 2s ease-in-out infinite;
+  }
+  @keyframes livePulse{
+    0%{box-shadow:0 0 0 0 rgba(111,191,115,0.55);}
+    70%{box-shadow:0 0 0 8px rgba(111,191,115,0);}
+    100%{box-shadow:0 0 0 0 rgba(111,191,115,0);}
+  }
+  .refresh-btn{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    background:var(--card-bg);
+    border:1px solid var(--card-border);
+    border-radius:999px;
+    padding:7px 16px;
+    font-family:'Be Vietnam Pro', sans-serif;
+    font-size:0.8rem;
+    color:var(--ink);
+    cursor:pointer;
+    transition:border-color .25s ease, color .25s ease, background .8s ease;
+  }
+  .refresh-btn:hover{border-color:var(--rose); color:var(--rose-deep);}
+  .refresh-btn .icon{display:inline-block; transition:transform .5s ease;}
+  .refresh-btn.spinning .icon{animation:spin360 .7s linear infinite;}
+  @keyframes spin360{to{transform:rotate(360deg);}}
+
+  .poem-author{
+    color:var(--ink-soft);
+    font-style:normal;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .marquee-track{animation:none;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="intro-overlay" id="introOverlay">
+  <div class="intro-inner">
+    <span class="intro-flower">❀</span>
+    <div class="intro-eyebrow">Kính mời bạn</div>
+    <h2 class="intro-title">Bước vào không gian thơ<br>của <em>Quốc Duy</em></h2>
+    <p class="intro-line">Nơi những rung động rất thật được viết thành từng con chữ, từng vần thơ nhỏ.</p>
+    <button class="intro-btn" id="introEnter" type="button">Bắt đầu <span>→</span></button>
+    <div class="intro-hint">hoặc chạm vào bất kỳ đâu để tiếp tục</div>
+  </div>
+</div>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+<div class="scene"></div>
+<div class="stars" id="stars"></div>
+<div class="orb"></div>
+<div class="hills">
+  <svg viewBox="0 0 1440 260" preserveAspectRatio="none">
+    <path d="M0,180 C240,100 380,220 620,150 C860,80 1040,200 1440,120 L1440,260 L0,260 Z" fill="var(--moss)" opacity="0.55"/>
+    <path d="M0,220 C300,160 560,240 820,190 C1080,140 1260,230 1440,190 L1440,260 L0,260 Z" fill="var(--moss-deep)" opacity="0.7"/>
+  </svg>
+</div>
+<svg class="blossom-branch" viewBox="0 0 200 220" fill="none">
+  <path d="M10 10 Q60 60 40 120 Q30 170 70 210" stroke="var(--moss-deep)" stroke-width="3" fill="none" opacity="0.6"/>
+  <g fill="var(--rose)" opacity="0.85">
+    <circle cx="30" cy="35" r="7"/><circle cx="45" cy="48" r="5"/><circle cx="55" cy="80" r="6"/>
+    <circle cx="35" cy="100" r="5"/><circle cx="60" cy="140" r="7"/><circle cx="45" cy="165" r="5"/>
+  </g>
+</svg>
+<svg class="blossom-branch right" viewBox="0 0 200 220" fill="none">
+  <path d="M10 10 Q60 60 40 120 Q30 170 70 210" stroke="var(--moss-deep)" stroke-width="3" fill="none" opacity="0.55"/>
+  <g fill="var(--gold)" opacity="0.75">
+    <circle cx="30" cy="35" r="6"/><circle cx="45" cy="48" r="5"/><circle cx="55" cy="80" r="6"/>
+    <circle cx="35" cy="100" r="5"/><circle cx="60" cy="140" r="6"/>
+  </g>
+</svg>
+<div class="petals" id="petals"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<div class="top-bar" id="topBar">
+  <div class="brand-mini">Tuyển tập thơ của Quốc Duy</div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Chuyển sáng tối">
+    <span class="knob"></span>
+    <span id="themeLabel">Ban ngày</span>
+  </button>
+</div>
+
+<header class="hero">
+  <div class="eyebrow">Một góc thơ nhỏ, một trời thương nhớ</div>
+  <h1 class="title">Tuyển tập thơ<br>của <em>Quốc Duy</em></h1>
+  <p class="tagline">Nơi lưu lại những vần thơ được viết bằng rung động thật —
+  về ánh trăng, về đôi mắt biếc, và những nỗi nhớ chẳng gọi thành tên.</p>
+  <div class="hero-stats">
+    <div><b id="statCount">0</b>Bài thơ</div>
+    <div><b>2026</b>Bắt đầu</div>
+    <div><b id="statLikes">0</b>Lượt tim</div>
+  </div>
+  <div class="scroll-cue"><span></span>Lướt xuống</div>
+</header>
+
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span>Quốc Thái Duy Minh</span>
+    <span>Quốc Thái Duy Minh</span>
+    <span>Quốc Thái Duy Minh</span>
+    <span>Quốc Thái Duy Minh</span>
+    <span>Quốc Thái Duy Minh</span>
+    <span>Quốc Thái Duy Minh</span>
+  </div>
+</div>
+
+<main>
+  <div class="compose-wrap">
+    <section class="section-head">
+      <div class="num">Viết cho riêng mình</div>
+      <h2>Đăng một bài thơ mới</h2>
+      <p>Mỗi con chữ gõ xuống đều sẽ hiện lên ngay bên dưới, như một trang giấy vừa được lật.</p>
+    </section>
+    <form class="compose" id="composeForm">
+      <div class="compose-grid">
+        <div class="field">
+          <label for="poemTitle">Tên bài thơ</label>
+          <input type="text" id="poemTitle" placeholder="Ví dụ: Trăng Và Nỗi Nhớ" required>
+        </div>
+        <div class="field">
+          <label for="authorName">Tên của bạn (không bắt buộc)</label>
+          <input type="text" id="authorName" placeholder="Ví dụ: Một người yêu thơ">
+        </div>
+        <div class="field">
+          <label for="poemDedication">Đề tặng (không bắt buộc)</label>
+          <input type="text" id="poemDedication" placeholder="Ví dụ: Thương em">
+        </div>
+        <div class="field full">
+          <label for="poemContent">Nội dung bài thơ</label>
+          <textarea id="poemContent" placeholder="Viết từng dòng thơ ở đây..." required></textarea>
+        </div>
+        <div class="checkbox-field">
+          <input type="checkbox" id="hasTranslation">
+          <label for="hasTranslation">Bài thơ này có bản dịch nghĩa</label>
+        </div>
+        <div class="translation-field" id="translationField">
+          <div class="field full" style="margin-bottom:0;">
+            <label for="poemTranslation">Dịch nghĩa</label>
+            <textarea id="poemTranslation" placeholder="Viết bản dịch nghĩa của bạn ở đây..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="compose-footer">
+        <span class="hint">Bài thơ sẽ hiện trong mục "Những vần thơ" phía dưới.</span>
+        <button type="submit" class="publish">Đăng thơ ✒</button>
+      </div>
+    </form>
+  </div>
+
+  <section class="section-head">
+    <div class="num">Bộ sưu tập</div>
+    <h2>Những vần thơ</h2>
+    <p>Một không gian mở — ai đăng thơ lên, mọi người ghé qua đều nhìn thấy, như một diễn đàn nhỏ.</p>
+    <div class="gallery-controls">
+      <span class="live-indicator"><span class="live-dot"></span>Tự động làm mới mỗi 20 giây</span>
+      <button class="refresh-btn" id="refreshBtn" type="button"><span class="icon">↻</span>Làm mới</button>
+    </div>
+  </section>
+
+  <div class="gallery" id="gallery"></div>
+</main>
+
+<footer>
+  “Thơ là nơi cảm xúc được phép ở lại lâu hơn một khoảnh khắc.” — Quốc Duy
+</footer>
+
+<button class="back-to-top" id="backToTop" aria-label="Cuộn về đầu trang">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M6 11l6-6 6 6"/></svg>
+</button>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------------- THEME ---------------- */
+const root = document.documentElement;
+const themeToggle = document.getElementById('themeToggle');
+const themeLabel = document.getElementById('themeLabel');
+
+async function loadTheme(){
+  let theme = 'light';
+  try{
+    const res = await window.storage.get('theme-pref', false);
+    if(res && res.value) theme = res.value;
+  }catch(e){ /* no saved preference yet */ }
+  applyTheme(theme);
+}
+function applyTheme(theme){
+  root.setAttribute('data-theme', theme);
+  themeLabel.textContent = theme === 'light' ? 'Ban ngày' : 'Ban đêm';
+}
+themeToggle.addEventListener('click', async () => {
+  const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  applyTheme(next);
+  try{ await window.storage.set('theme-pref', next, false); }catch(e){}
+});
+loadTheme();
+
+/* ---------------- TOP BAR SHOW ON SCROLL ---------------- */
+const topBar = document.getElementById('topBar');
+
+/* ---------------- STARS ---------------- */
+const starsWrap = document.getElementById('stars');
+for(let i=0;i<70;i++){
+  const s = document.createElement('div');
+  s.className = 'star';
+  s.style.left = Math.random()*100+'%';
+  s.style.top = Math.random()*70+'%';
+  s.style.animationDelay = (Math.random()*3.5)+'s';
+  starsWrap.appendChild(s);
+}
+
+/* ---------------- PETALS ---------------- */
+const petalsWrap = document.getElementById('petals');
+for(let i=0;i<16;i++){
+  const p = document.createElement('div');
+  p.className = 'petal';
+  const dur = 10 + Math.random()*10;
+  const swayDur = 3 + Math.random()*3;
+  p.style.left = Math.random()*100+'%';
+  p.style.animationDuration = dur+'s, '+swayDur+'s';
+  p.style.animationDelay = (-Math.random()*dur)+'s, 0s';
+  p.style.opacity = 0.4 + Math.random()*0.4;
+  p.style.transform = 'rotate('+Math.floor(Math.random()*360)+'deg)';
+  petalsWrap.appendChild(p);
+}
+
+/* ---------------- POEMS ---------------- */
+const SEED_POEMS = [
+  {
+    id:'sample-1',
+    title:'Thương Em',
+    author:'Quốc Duy',
+    dedication:'Thương em',
+    content:`Thế giới rộng lớn ngoài tầm mắt,
+Trong đôi mắt biếc có một người.
+Hai người nhỏ bé ngoài kia đó,
+Vì sao có thể lại tương phùng.
+
+Anh yêu đôi mắt với nụ cười,
+Yêu cả tâm hồn và giọng nói.
+Tự hỏi lòng mình khi nào nhỉ?
+Yêu em, anh đã lỡ yêu rồi.
+
+Có lẽ từ khi nhìn em ấy,
+Cuộn tròn say ngủ dưới đèn khuya.
+Đời nhiều gai góc em tự gánh,
+Đau buồn cố giữ, chẳng sẻ chia.
+
+Từ giờ...
+Không cần mạnh mẽ với ai cả,
+Bên anh, em cứ hóa trẻ con.
+Anh thương, anh dỗ, anh ôm trọn,
+Trả lại cho em chút trẻ thơ.`,
+    date:'2026', sample:true
+  },
+  {
+    id:'sample-2',
+    title:'Minh Hoạ Nhớ Nhung',
+    author:'Quốc Duy',
+    dedication:'',
+    content:`Yêu một người viết một bài thơ,
+Minh hoạ chàng qua từng dòng nhớ.
+Thái dương một vầng trôi lơ đãng,
+Nhất một vầng trăng sáng trong lòng.`,
+    date:'2026', sample:true
+  },
+  {
+    id:'sample-3',
+    title:'Ngẩn Ngơ Dưới Trăng',
+    author:'Quốc Duy',
+    dedication:'',
+    content:`Anh thích nhìn em lúc ngẩn ngơ,
+Giữa một vầng trăng sáng hững hờ.
+Người ngắm trăng trôi trong nỗi nhớ,
+Anh nhòm đôi mắt thấy trời sao.`,
+    date:'2026', sample:true
+  },
+  {
+    id:'sample-4',
+    title:'Nhất Nguyệt Đào Viên',
+    author:'Quốc Duy',
+    dedication:'',
+    content:`Nhất nguyệt đào viên, nguyệt mãn hồ,
+Tam xuân trúc kính, xuân phong các.
+Nhân hình như ảnh, tình chân thức,
+Tri ái tiểu sinh ái khiết chân.`,
+    translation:`Trong vườn đào trăng rơi đầy hồ
+Ba tháng xuân xanh, có gió xuân
+Bóng người thấp thoáng nhưng tình là thật
+Biết yêu chàng trai nhỏ, yêu thật lòng.`,
+    date:'2026', sample:true
+  },
+  {
+    id:'sample-5',
+    title:'Hạ Kết Duyên',
+    author:'Minh Thái',
+    dedication:'Quốc Duy',
+    content:`Hạ vào lúc bắt đầu,
+Cảm xúc thì đem giấu
+Tim thì mãi đau đấu
+Lòng chẳng vướng bận đâu.
+
+Hạ vào lúc càng sâu,
+Hữu duyên gặp tình đầu
+Tình mình như dưa hấu
+Em chỉ muốn bền lâu.
+
+Anh tựa như con gấu
+Ôm Bông để ngủ sâu
+Tính cách thì hiền hậu
+Nhân Lễ Nghĩa sắc sâu.
+
+Cuối hạ kết có hậu,
+Cuộc sống thêm nhiệm mầu
+Tình duyên đỏ như dâu
+Em tự hỏi một câu
+Câu này xin được giấu
+Để sau này biết sau.`,
+    date:'2026', sample:true
+  },
+  {
+    id:'sample-6',
+    title:'Nỗi Nhớ Mùa Hạ',
+    author:'Quốc Duy',
+    dedication:'',
+    content:`Em ơi một mùa hạ,
+Nắng rơi trong mắt nàng.
+Cuối trời ánh trăng sáng,
+Vô tình tìm thấy nhau.
+
+Có một mùa hạ đó,
+Lòng xôn xao xúc cảm,
+Vừa thương lại vừa nhớ,
+Muốn ôm em vào lòng.
+
+Cứ mỗi ngày xa cách,
+Nỗi nhớ lại dày thêm,
+Lòng đợi chờ người ấy,
+Lòng mình càng trào dâng.
+
+"Mon petit mec."
+
+Yêu là lưu nỗi nhớ,
+Em có thấy vậy không?
+Nhất là trong ánh mắt,
+Mà em từng gửi trao.`,
+    date:'2026', sample:true
+  }
+];
+
+let poems = [];
+const gallery = document.getElementById('gallery');
+const statCount = document.getElementById('statCount');
+const statLikes = document.getElementById('statLikes');
+
+function updateLikeStat(){
+  const total = poems.reduce((a,p) => a + (p.likes||0), 0);
+  animateNumber(statLikes, total);
+}
+function animateNumber(el, target){
+  const start = parseInt(el.textContent, 10) || 0;
+  if(start === target){ el.textContent = target; return; }
+  const dur = 500;
+  const t0 = performance.now();
+  function step(t){
+    const p = Math.min(1, (t - t0) / dur);
+    const val = Math.round(start + (target - start) * (1 - Math.pow(1-p, 3)));
+    el.textContent = val;
+    if(p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function escapeHTML(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+const HEART_ICON = `<svg viewBox="0 0 24 24"><path class="heart-path" d="M12 20.5s-7.5-4.6-10-9.4C0.3 7.6 2 4 5.6 4c2 0 3.6 1.1 4.4 2.7C10.8 5.1 12.4 4 14.4 4 18 4 19.7 7.6 22 11.1c-2.5 4.8-10 9.4-10 9.4z" transform="scale(0.92) translate(1,1)"/></svg>`;
+
+function poemCardHTML(poem, index){
+  const dedication = poem.dedication ? `<span class="poem-dedication">— ${escapeHTML(poem.dedication)} —</span>` : '<span></span>';
+  const deleteBtn = poem.id.startsWith('sample-') ? '' : `<button class="poem-delete" data-id="${poem.id}">Xoá bài</button>`;
+  const translationBlock = poem.translation
+    ? `<div class="poem-divider">Dịch nghĩa</div><div class="poem-body">${escapeHTML(poem.translation)}</div>`
+    : '';
+  const likeCount = poem.likes || 0;
+  const authorName = escapeHTML(poem.author && poem.author.trim() ? poem.author.trim() : 'Ẩn danh');
+  return `
+    <article class="poem-card" data-id="${poem.id}">
+      <div class="poem-inner">
+        <div class="poem-index">Thơ số ${String(index+1).padStart(2,'0')} · <span class="poem-author">${authorName}</span></div>
+        <h3 class="poem-title">${escapeHTML(poem.title)}</h3>
+        <div class="poem-body">${escapeHTML(poem.content)}</div>
+        ${translationBlock}
+        <div class="poem-foot">
+          ${dedication}
+          <div class="like-wrap">
+            <button class="like-btn" data-id="${poem.id}" aria-label="Thả tim cho bài thơ này">
+              ${HEART_ICON}
+              <span class="like-count">${likeCount}</span>
+            </button>
+          </div>
+          <span class="poem-date">${escapeHTML(poem.date || '')}</span>
+        </div>
+        ${deleteBtn ? `<div style="text-align:right;margin-top:10px;">${deleteBtn}</div>` : ''}
+      </div>
+    </article>
+  `;
+}
+
+function renderGallery(){
+  animateNumber(statCount, poems.length);
+  updateLikeStat();
+  if(poems.length === 0){
+    gallery.innerHTML = `<div class="empty-state">Chưa có bài thơ nào. Hãy viết bài đầu tiên ở phía trên.</div>`;
+    return;
+  }
+  gallery.innerHTML = poems.map((p, i) => poemCardHTML(p, i)).join('');
+  attachCardEffects();
+  attachDeleteHandlers();
+  attachLikeHandlers();
+  observeCards();
+}
+
+/* 3D tilt effect */
+function attachCardEffects(){
+  document.querySelectorAll('.poem-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      card.style.transform = `perspective(1000px) rotateX(${(-y*10).toFixed(2)}deg) rotateY(${(x*10).toFixed(2)}deg) translateY(-4px)`;
+      card.style.setProperty('--mx', ((x+0.5)*100).toFixed(1)+'%');
+      card.style.setProperty('--my', ((y+0.5)*100).toFixed(1)+'%');
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+    });
+  });
+}
+
+/* scroll reveal */
+function observeCards(){
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.15});
+  document.querySelectorAll('.poem-card:not(.in)').forEach(c => obs.observe(c));
+}
+
+/* ---------------- LƯU TRỮ (Claude persistent storage) ---------------- */
+let likesCache = {};
+
+async function loadLikes(){
+  try{
+    const list = await window.storage.list('likes:', true);
+    if(!list || !list.keys) return;
+    await Promise.all(list.keys.map(async k => {
+      try{
+        const r = await window.storage.get(k, true);
+        if(r) likesCache[k.replace('likes:', '')] = parseInt(r.value, 10) || 0;
+      }catch(e){}
+    }));
+  }catch(e){ /* chưa có lượt tim nào */ }
+}
+
+async function loadUserPoems(){
+  try{
+    const list = await window.storage.list('poem:', true);
+    if(!list || !list.keys || list.keys.length === 0) return [];
+    const results = await Promise.all(list.keys.map(async k => {
+      try{
+        const r = await window.storage.get(k, true);
+        return r ? JSON.parse(r.value) : null;
+      }catch(e){ return null; }
+    }));
+    return results.filter(Boolean).sort((a,b) => (a.ts||0) - (b.ts||0));
+  }catch(e){
+    return [];
+  }
+}
+
+function mergeLikes(list){
+  return list.map(p => ({...p, likes: likesCache[p.id] || 0}));
+}
+
+async function loadEverything(){
+  const [userPoems] = await Promise.all([loadUserPoems(), loadLikes()]);
+  poems = mergeLikes([...SEED_POEMS, ...userPoems]);
+}
+
+async function initGallery(){
+  await loadEverything();
+  renderGallery();
+}
+
+function attachLikeHandlers(){
+  document.querySelectorAll('.like-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.getAttribute('data-id');
+      const poem = poems.find(p => p.id === id);
+      if(!poem) return;
+      poem.likes = (poem.likes || 0) + 1;
+      likesCache[id] = poem.likes;
+      btn.querySelector('.like-count').textContent = poem.likes;
+      btn.classList.add('liked', 'pop');
+      setTimeout(() => btn.classList.remove('pop'), 460);
+      spawnHeartParticle(btn);
+      updateLikeStat();
+      try{
+        await window.storage.set('likes:'+id, String(poem.likes), true);
+      }catch(e){}
+    });
+  });
+}
+
+function spawnHeartParticle(btn){
+  const wrap = btn.closest('.like-wrap');
+  const p = document.createElement('span');
+  p.className = 'heart-particle';
+  p.textContent = '♥';
+  const dx = (Math.random()*30 - 15).toFixed(0) + 'px';
+  const rot = (Math.random()*40 - 20).toFixed(0) + 'deg';
+  p.style.setProperty('--dx', dx);
+  p.style.setProperty('--rot', rot);
+  wrap.appendChild(p);
+  setTimeout(() => p.remove(), 950);
+}
+
+function attachDeleteHandlers(){
+  document.querySelectorAll('.poem-delete').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.getAttribute('data-id');
+      poems = poems.filter(p => p.id !== id);
+      renderGallery();
+      showToast('Đã xoá bài thơ.');
+      try{
+        await window.storage.delete('poem:'+id, true);
+        await window.storage.delete('likes:'+id, true);
+      }catch(e){}
+    });
+  });
+}
+
+/* ---------------- FORM ---------------- */
+const form = document.getElementById('composeForm');
+const hasTranslationBox = document.getElementById('hasTranslation');
+const translationField = document.getElementById('translationField');
+hasTranslationBox.addEventListener('change', () => {
+  translationField.classList.toggle('open', hasTranslationBox.checked);
+  if(hasTranslationBox.checked){
+    setTimeout(() => document.getElementById('poemTranslation').focus(), 200);
+  }
+});
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const title = document.getElementById('poemTitle').value.trim();
+  const author = document.getElementById('authorName').value.trim();
+  const dedication = document.getElementById('poemDedication').value.trim();
+  const content = document.getElementById('poemContent').value.trim();
+  const wantsTranslation = hasTranslationBox.checked;
+  const translation = document.getElementById('poemTranslation').value.trim();
+  if(!title || !content) return;
+
+  const id = 'p' + Date.now();
+  const poem = {
+    id, title, author: author || 'Ẩn danh', dedication, content,
+    translation: (wantsTranslation && translation) ? translation : '',
+    likes: 0,
+    date: new Date().toLocaleDateString('vi-VN'),
+    ts: Date.now()
+  };
+
+  /* Hiện bài thơ ngay lập tức để trải nghiệm mượt mà */
+  poems.push(poem);
+  renderGallery();
+  form.reset();
+  translationField.classList.remove('open');
+  document.getElementById('gallery').scrollIntoView({behavior:'smooth', block:'start'});
+
+  /* Lưu thật vào bộ nhớ của trang để không bị mất khi tải lại / người khác cũng thấy */
+  try{
+    const res = await window.storage.set('poem:'+id, JSON.stringify(poem), true);
+    if(!res) throw new Error('lưu thất bại');
+    showToast('🌸 Đã đăng bài thơ mới!');
+  }catch(err){
+    poems = poems.filter(p => p.id !== id);
+    renderGallery();
+    showToast('Không thể lưu bài thơ, vui lòng thử lại.');
+  }
+});
+
+/* ---------------- TOAST ---------------- */
+let toastTimer;
+function showToast(msg){
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
+}
+
+/* ---------------- CURSOR GLOW + PARALLAX ---------------- */
+const cursorGlow = document.getElementById('cursorGlow');
+const orbEl = document.querySelector('.orb');
+const hillsEl = document.querySelector('.hills');
+let isPointerFine = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+
+if(isPointerFine){
+  let gx = window.innerWidth/2, gy = window.innerHeight/2;
+  window.addEventListener('mousemove', (e) => {
+    cursorGlow.classList.add('on');
+    gx = e.clientX; gy = e.clientY;
+    cursorGlow.style.left = gx + 'px';
+    cursorGlow.style.top = gy + 'px';
+
+    const px = (e.clientX / window.innerWidth - 0.5);
+    const py = (e.clientY / window.innerHeight - 0.5);
+    orbEl.style.transform = `translate(${px*-18}px, ${py*-14}px)`;
+    hillsEl.style.transform = `translate(${px*10}px, 0)`;
+  });
+  document.addEventListener('mouseleave', () => cursorGlow.classList.remove('on'));
+}
+
+/* ---------------- SCROLL PROGRESS + BACK TO TOP ---------------- */
+const scrollProgress = document.getElementById('scrollProgress');
+const backToTop = document.getElementById('backToTop');
+
+function updateScrollUI(){
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  scrollProgress.style.width = pct + '%';
+  backToTop.classList.toggle('show', scrollTop > window.innerHeight * 0.6);
+  topBar.classList.toggle('show', scrollTop > 260);
+}
+window.addEventListener('scroll', updateScrollUI, {passive:true});
+window.addEventListener('resize', updateScrollUI);
+updateScrollUI();
+
+backToTop.addEventListener('click', () => {
+  spawnClickPetals(backToTop);
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+function spawnClickPetals(el){
+  for(let i=0;i<8;i++){
+    const p = document.createElement('span');
+    p.className = 'click-petal';
+    p.textContent = '❀';
+    const angle = (Math.PI*2/8)*i + Math.random()*0.3;
+    const dist = 34 + Math.random()*14;
+    p.style.setProperty('--px', (Math.cos(angle)*dist).toFixed(0)+'px');
+    p.style.setProperty('--py', (Math.sin(angle)*dist).toFixed(0)+'px');
+    p.style.setProperty('--pr', (Math.random()*180-90).toFixed(0)+'deg');
+    el.appendChild(p);
+    setTimeout(() => p.remove(), 720);
+  }
+}
+
+/* ---------------- INTRO ---------------- */
+const introOverlay = document.getElementById('introOverlay');
+const introEnter = document.getElementById('introEnter');
+document.body.style.overflow = 'hidden';
+let introDismissed = false;
+function dismissIntro(){
+  if(introDismissed) return;
+  introDismissed = true;
+  introOverlay.classList.add('hide');
+  document.body.style.overflow = '';
+}
+introEnter.addEventListener('click', (e) => { e.stopPropagation(); dismissIntro(); });
+introOverlay.addEventListener('click', dismissIntro);
+setTimeout(dismissIntro, 7000);
+
+/* ---------------- ĐỒNG BỘ (LÀM MỚI TỪ BỘ NHỚ LƯU TRỮ) ---------------- */
+const refreshBtn = document.getElementById('refreshBtn');
+
+function toggleRefreshSpin(on){
+  if(refreshBtn) refreshBtn.classList.toggle('spinning', on);
+}
+
+async function syncPoems(manual){
+  try{
+    if(manual) toggleRefreshSpin(true);
+    const prevIds = new Set(poems.map(p => p.id));
+    const prevLikesTotal = poems.reduce((a,p) => a + (p.likes||0), 0);
+
+    await loadEverything();
+
+    const newIds = new Set(poems.map(p => p.id));
+    const addedIds = [...newIds].filter(id => !prevIds.has(id));
+    const newLikesTotal = poems.reduce((a,p) => a + (p.likes||0), 0);
+    const changed = addedIds.length > 0 || newLikesTotal !== prevLikesTotal;
+
+    if(changed || manual){
+      renderGallery();
+    }
+    if(addedIds.length > 0){
+      showToast('✨ Có bài thơ mới vừa được đăng!');
+    }else if(manual){
+      showToast('Đã cập nhật danh sách.');
+    }
+  }catch(e){
+    if(manual) showToast('Không thể làm mới lúc này.');
+  }finally{
+    if(manual) toggleRefreshSpin(false);
+  }
+}
+
+if(refreshBtn){
+  refreshBtn.addEventListener('click', () => syncPoems(true));
+}
+
+/* Tự động làm mới định kỳ để thấy bài thơ mới từ người khác */
+setInterval(() => {
+  if(document.hidden) return;
+  syncPoems(false);
+}, 20000);
+
+/* ---------------- INIT ---------------- */
+initGallery();
+</script>
+</body>
+</html>
